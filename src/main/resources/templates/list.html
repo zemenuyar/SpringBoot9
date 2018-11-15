@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<th:block th:insert="base :: header"></th:block>
+</head>
+<body>
+<div th:replace="base :: nav"></div>
+<div class="space"></div>
+
+<div class="container bg-light">
+
+    <h2>Welcome!</h2>
+    <!--<h2>Insecure page</h2>-->
+
+    <div sec:authorize="!isAuthenticated()">
+        <a href="/login"> Login</a><br />
+    </div>
+    <div sec:authorize="isAuthenticated()">
+        <a href="/add"> Add a Message</a><br />
+    </div>
+
+    <table class="table">
+        <table>
+        <tr>
+            <th>Title</th>
+            <th>Posted By</th>
+            <th>HashTags</th>
+            <th></th>
+        </tr>
+        <tr th:each="message : ${messages}">
+            <td th:text="${message.title}"></td>
+            <td th:text="${message.postedby}"></td>
+            <td th:text="${message.hashtags}"></td>
+            <td>
+                <span th:if="${user_id == message.user.id}">
+                    <!--<a th:href="@{/update/{id}(id=${update.id})}">Update</a>-->
+                    <!--<a th:href="@{/delete/{id}(id=${course.id})}">Delete</a>-->
+                </span>
+
+                <a th:href="@{/detail/{id}(id=${message.id})}">Details</a>
+            </td>
+        </tr>
+    </table>
+
+    <button class="btn btn-success" sec:authorize="isAuthenticated()">
+        <!--<a href="/add"> Add a course</a><br />-->
+        <a href="/logout" class="text-danger"> Logout</a><br />
+    </button>
+    <button class="text-light bg-dark" sec:authorize="isAuthenticated()">
+        <!--<a href="/add"> Add a course</a><br />-->
+        <a href="/register" class="text-light"> Register</a><br />
+    </button>
+
+    <div class="space"></div>
+    </div>
+
+<footer th:replace="base :: footer"></footer>
+</body>
+</html>
